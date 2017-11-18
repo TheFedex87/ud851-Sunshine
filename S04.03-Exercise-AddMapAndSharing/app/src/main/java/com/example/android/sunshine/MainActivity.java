@@ -222,6 +222,21 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapterOn
         }
 
         // TODO (2) Launch the map when the map menu item is clicked
+        if (id == R.id.action_open_map){
+            String addressLocation = "Città di Castello Viale Sempione 3";
+            Uri.Builder builder = new Uri.Builder();
+            Uri uri = builder.scheme("geo")
+                    .path("0,0")
+                    .appendQueryParameter("q", addressLocation).build();
+
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
+            else{
+                Log.d(TAG, "App to handle map requested not installed");
+            }
+        }
 
         return super.onOptionsItemSelected(item);
     }
