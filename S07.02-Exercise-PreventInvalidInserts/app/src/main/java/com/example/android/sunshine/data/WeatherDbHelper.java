@@ -73,7 +73,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                  * WeatherEntry implements the interface, "BaseColumns", which does have a field
                  * named "_ID". We use that here to designate our table's primary key.
                  */
-                WeatherEntry._ID               + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                WeatherEntry._ID               + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 
                 WeatherEntry.COLUMN_DATE       + " INTEGER NOT NULL, "                 +
 
