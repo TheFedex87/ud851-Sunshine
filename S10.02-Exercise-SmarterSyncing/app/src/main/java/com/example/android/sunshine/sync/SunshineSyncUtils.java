@@ -57,6 +57,7 @@ public class SunshineSyncUtils {
                             WeatherContract.WeatherEntry._ID
                     };
 
+
                     Cursor weatherCursor = context.getContentResolver().query(
                             forecastQueryUri,
                             projectionColumns,
