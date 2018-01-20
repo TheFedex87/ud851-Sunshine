@@ -131,7 +131,9 @@ public class SunshineSyncUtils {
         Thread checkForEmpty = new Thread(new Runnable() {
             @Override
             public void run() {
-
+                try {
+                    Thread.sleep(5000);
+                }catch(Exception ex){}
                 /* URI for every row of weather data in our weather table*/
                 Uri forecastQueryUri = WeatherContract.WeatherEntry.CONTENT_URI;
 
