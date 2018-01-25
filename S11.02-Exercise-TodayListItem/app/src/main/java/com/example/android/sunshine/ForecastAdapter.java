@@ -41,6 +41,8 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
 //  TODO (5) Within bools.xml in the portrait specific directory, add a bool called use_today_layout and set it to false
 
 //  TODO (6) Declare constant IDs for the ViewType for today and for a future day
+    private final int TODAY_VIEW_TYPE = 154;
+    private final int FUTURE_DAYS_TYPE = 164;
 
     /* The context we use to utility methods, app resources and layout inflaters */
     private final Context mContext;
@@ -67,6 +69,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
      * boolean resources.
      */
 //  TODO (7) Declare a private boolean called mUseTodayLayout
+    private boolean mUseTodayLayout;
 
     private Cursor mCursor;
 
@@ -81,6 +84,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         mContext = context;
         mClickHandler = clickHandler;
 //      TODO (8) Set mUseTodayLayout to the value specified in resources
+        mUseTodayLayout = context.getResources().getBoolean(R.bool.use_today_layout);
     }
 
     /**
@@ -97,15 +101,20 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     @Override
     public ForecastAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
+        int layoutResource = 0;
 //      TODO (12) If the view type of the layout is today, use today layout
-
+        if (viewType == TODAY_VIEW_TYPE)
+            layoutResource = R.layout.list_item_forecast_today;
+        else if(viewType == FUTURE_DAYS_TYPE)
 //      TODO (13) If the view type of the layout is future day, use future day layout
-
+            layoutResource = R.layout.forecast_list_item;
+        else
 //      TODO (14) Otherwise, throw an IllegalArgumentException
+            throw new IllegalArgumentException("Not valid viewType ID");
 
         View view = LayoutInflater
                 .from(mContext)
-                .inflate(R.layout.forecast_list_item, viewGroup, false);
+                .inflate(layoutResource, viewGroup, false);
 
         return new ForecastAdapterViewHolder(view);
     }
@@ -131,13 +140,15 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         int weatherImageId;
 
 //      TODO (15) If the view type of the layout is today, display a large icon
-
+        if (forecastAdapterViewHolder.getItemViewType() == TODAY_VIEW_TYPE)
+            weatherImageId = SunshineWeatherUtils.getLargeArtResourceIdForWeatherCondition(weatherId);
+        else if(forecastAdapterViewHolder.getItemViewType() == FUTURE_DAYS_TYPE)
 //      TODO (16) If the view type of the layout is future day, display a small icon
-
+            weatherImageId = SunshineWeatherUtils.getSmallArtResourceIdForWeatherCondition(weatherId);
 //      TODO (17) Otherwise, throw an IllegalArgumentException
+        else
+            throw new IllegalArgumentException("Not valid viewType ID");
 
-        weatherImageId = SunshineWeatherUtils
-                .getSmallArtResourceIdForWeatherCondition(weatherId);
 
         forecastAdapterViewHolder.iconView.setImageResource(weatherImageId);
 
@@ -212,8 +223,15 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     }
 
 //  TODO (9) Override getItemViewType
-//      TODO (10) Within getItemViewType, if mUseTodayLayout is true and position is 0, return the ID for today viewType
-//      TODO (11) Otherwise, return the ID for future day viewType
+    @Override
+    public int getItemViewType(int position) {
+        //      TODO (10) Within getItemViewType, if mUseTodayLayout is true and position is 0, return the ID for today viewType
+        //      TODO (11) Otherwise, return the ID for future day viewType
+        if (mUseTodayLayout && position == 0)
+            return TODAY_VIEW_TYPE;
+
+        return FUTURE_DAYS_TYPE;
+    }
 
     /**
      * Swaps the cursor used by the ForecastAdapter for its weather data. This method is called by
